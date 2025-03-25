@@ -6,7 +6,7 @@ export const bugSchema = new Schema({
     title: {type: String, minLength: 10, maxLength: 50, required: true },
     description: {type: String, minLength: 10, maxLength: 500, required: true},
     priority: {type: Number, min: 1, max: 5, required: true},
-    closed: {type: Boolean, required: true},
+    closed: {type: Boolean, default: false, required: true},
     closedDate: {type: Date, required: false },
     creatorId: { type: Schema.ObjectId, required: true, ref: 'Account' },
 
@@ -16,6 +16,12 @@ export const bugSchema = new Schema({
 {
   timestamps: true,
   toJSON: { virtuals: true, versionKey: false }
-}
+},
 )
 
+bugSchema.virtual('creator', {
+  localField: 'creatorId',
+  foreignField: '_id',
+  ref: 'Account',
+  justOne: true
+})
